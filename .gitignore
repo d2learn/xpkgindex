@@ -172,3 +172,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Other
+.vscode
+*.DS_Store
+xim-pkgindex
+data.json

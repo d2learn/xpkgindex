@@ -1,0 +1,375 @@
+[
+    {
+        "name": "khistory",
+        "description": "An elegant keyboard/gamepad key detection and visualization tool",
+        "version": "pre-v0.0.5",
+        "maintainers": "unknown",
+        "licenses": "GPL-3.0",
+        "categories": [
+            "other"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install khistory@pre-v0.0.5",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "../index.html",
+            "📦Repo": "https://github.com/Sunrisepeak/KHistory"
+        }
+    },
+    {
+        "name": "xvm",
+        "description": "a simple and generic version management tool",
+        "version": "dev",
+        "maintainers": "d2learn",
+        "licenses": "Apache-2.0",
+        "categories": [
+            "tools",
+            "version-management"
+        ],
+        "keywords": [
+            "rust",
+            "cross-platform",
+            "version-management"
+        ],
+        "install": "xlings install xvm@dev",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "../index.html",
+            "📦Repo": "https://github.com/d2learn/xlings"
+        }
+    },
+    {
+        "name": "xvm-sysdetect",
+        "description": "XVM - System Package Detect Tools",
+        "version": "latest",
+        "maintainers": "unknown",
+        "licenses": "Apache-2.0",
+        "categories": [
+            "xim",
+            "xvm"
+        ],
+        "keywords": [
+            "xvm",
+            "detect-tool"
+        ],
+        "install": "xlings install xvm-sysdetect@latest",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "../index.html",
+            "📦Repo": "https://github.com/d2learn/xim-pkgindex"
+        }
+    },
+    {
+        "name": "cpp",
+        "description": "C++ language toolchain",
+        "version": "gnu",
+        "maintainers": "xim team",
+        "licenses": "unknown",
+        "categories": [
+            "plang",
+            "compiler",
+            "c"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install cpp@gnu",
+        "dependencies": {
+            "gcc": ""
+        },
+        "links": {
+            "🏠Homepage": "https://github.com/d2learn/xim-pkgindex",
+            "📦Repo": "../index.html"
+        }
+    },
+    {
+        "name": "vscode",
+        "description": "Visual Studio Code",
+        "version": "1.96.2",
+        "maintainers": "unknown",
+        "licenses": "MIT",
+        "categories": [
+            "editor",
+            "tools"
+        ],
+        "keywords": [
+            "vscode",
+            "cross-platform"
+        ],
+        "install": "xlings install vscode@1.96.2",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "https://code.visualstudio.com",
+            "📦Repo": "https://github.com/microsoft/vscode"
+        }
+    },
+    {
+        "name": "gcc",
+        "description": "GCC, the GNU Compiler Collection",
+        "version": "15.1.0",
+        "maintainers": "unknown",
+        "licenses": "GPL",
+        "categories": [
+            "compiler",
+            "gnu",
+            "language"
+        ],
+        "keywords": [
+            "compiler",
+            "gnu",
+            "gcc",
+            "language",
+            "c",
+            "c++"
+        ],
+        "install": "xlings install gcc@15.1.0",
+        "dependencies": {
+            "gcc": "",
+            "bzip2": "",
+            "gzip": "",
+            "xz": "",
+            "make": ""
+        },
+        "links": {
+            "🏠Homepage": "../index.html",
+            "📦Repo": "https://github.com/gcc-mirror/gcc"
+        }
+    },
+    {
+        "name": "mdbook",
+        "description": "Create book from markdown files. Like Gitbook but implemented in Rust",
+        "version": "0.4.43",
+        "maintainers": "unknown",
+        "licenses": "MPL-2.0",
+        "categories": [
+            "book",
+            "markdown"
+        ],
+        "keywords": [
+            "book",
+            "gitbook",
+            "rustbook",
+            "markdown"
+        ],
+        "install": "xlings install mdbook@0.4.43",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "../index.html",
+            "📦Repo": "https://github.com/rust-lang/mdBook"
+        }
+    },
+    {
+        "name": "nodejs",
+        "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
+        "version": "22.14.0",
+        "maintainers": "unknown",
+        "licenses": "MIT",
+        "categories": [
+            "nodejs",
+            "javascript"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install nodejs@22.14.0",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "https://nodejs.org",
+            "📦Repo": "https://github.com/nodejs/node"
+        }
+    },
+    {
+        "name": "npm",
+        "description": "The package manager for JavaScript",
+        "version": "11.2.0",
+        "maintainers": "unknown",
+        "licenses": "Artistic License 2.0",
+        "categories": [
+            "package-manager",
+            "javascript"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install npm@11.2.0",
+        "dependencies": {
+            "nodejs": ""
+        },
+        "links": {
+            "🏠Homepage": "https://www.npmjs.com",
+            "📦Repo": "https://github.com/npm/cli"
+        }
+    },
+    {
+        "name": "nvm",
+        "description": "Node Version Manager",
+        "version": "0.39.0",
+        "maintainers": "https://github.com/nvm-sh/nvm?tab=readme-ov-file#maintainers",
+        "licenses": "MIT",
+        "categories": [
+            "tools",
+            "nodejs"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install nvm@0.39.0",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "https://github.com/nvm-sh/nvm",
+            "📦Repo": "https://github.com/nvm-sh/nvm"
+        }
+    },
+    {
+        "name": "dotnet",
+        "description": ".NET is the free, open-source, cross-platform framework",
+        "version": "9.0",
+        "maintainers": "Microsoft",
+        "licenses": "MIT",
+        "categories": [
+            "dotnet"
+        ],
+        "keywords": [
+            "cross-platform",
+            ".net",
+            "dotnet"
+        ],
+        "install": "xlings install dotnet@9.0",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "https://dotnet.microsoft.com/",
+            "📦Repo": "https://github.com/dotnet/sdk"
+        }
+    },
+    {
+        "name": "rust",
+        "description": "A language empowering everyone to build reliable and efficient software",
+        "version": "latest",
+        "maintainers": "https://prev.rust-lang.org/en-US/team.html",
+        "licenses": "MIT, Apache-2.0",
+        "categories": [
+            "plang",
+            "compiler"
+        ],
+        "keywords": [
+            "Reliability",
+            "Performance",
+            "Productivity"
+        ],
+        "install": "xlings install rust@latest",
+        "dependencies": {
+            "xim": "0.0.2"
+        },
+        "links": {
+            "🏠Homepage": "https://www.rust-lang.org",
+            "📦Repo": "https://github.com/rust-lang/rust"
+        }
+    },
+    {
+        "name": "seeme-server",
+        "description": "让别人知道你在干什么 seeme 服务端",
+        "version": "0.0.2",
+        "maintainers": "unknown",
+        "licenses": "unknown",
+        "categories": [
+            "web"
+        ],
+        "keywords": [
+            "flask",
+            "python"
+        ],
+        "install": "xlings install seeme-server@0.0.2",
+        "dependencies": {
+            "python@3": ""
+        },
+        "links": {
+            "🏠Homepage": "../index.html",
+            "📦Repo": "https://github.com/2412322029/seeme"
+        }
+    },
+    {
+        "name": "python",
+        "description": "The Python programming language",
+        "version": "3.13.1",
+        "maintainers": "Python Software Foundation",
+        "licenses": "PSF License | GPL compatible",
+        "categories": [
+            "python",
+            "plang"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install python@3.13.1",
+        "dependencies": {
+            "gcc": "",
+            "make": ""
+        },
+        "links": {
+            "🏠Homepage": "https://www.python.org",
+            "📦Repo": "https://github.com/python/cpython"
+        }
+    },
+    {
+        "name": "pnpm",
+        "description": "Fast, disk space efficient package manager",
+        "version": "9.15.0",
+        "maintainers": "unknown",
+        "licenses": "MIT",
+        "categories": [
+            "package-manager",
+            "typescript"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install pnpm@9.15.0",
+        "dependencies": {
+            "nodejs": ""
+        },
+        "links": {
+            "🏠Homepage": "https://pnpm.io",
+            "📦Repo": "https://github.com/pnpm/pnpm"
+        }
+    },
+    {
+        "name": "project-graph",
+        "description": "快速绘制节点图的桌面工具 - 项目进程拓扑图绘制、头脑风暴草稿",
+        "version": "1.2.7",
+        "maintainers": "LiRenTech",
+        "licenses": "MIT",
+        "categories": [
+            "desktop-tools",
+            "graph-tools"
+        ],
+        "keywords": [
+            "unknown"
+        ],
+        "install": "xlings install project-graph@1.2.7",
+        "dependencies": {
+            "webkit2gtk": ""
+        },
+        "links": {
+            "🏠Homepage": "https://project-graph.top",
+            "📦Repo": "https://github.com/LiRenTech/project-graph"
+        }
+    }
+]

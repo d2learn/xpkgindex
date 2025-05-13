@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MyPackageIndex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script defer src="search.js"></script>
+  <script src="language.js"></script>
+</head>
+<body>
+
+  {% include "top-bar.html" %}
+
+  <!-- 📦 悬浮搜索结果层 -->
+  <div id="package-list" class="search-float" style="display: none;">
+    {% for pkg in packages %}
+      <a class="package-item" href="packages/{{ pkg.name }}.html" data-search="{{ pkg.name }} {{ pkg.description }} {{ pkg.keywords | join(' ') }}">
+        <strong>{{ pkg.name }}</strong> - {% for tag in pkg.keywords %} <span class="keyword">{{ tag }}</span> {% endfor %}<br>
+        <small>{{ pkg.description }}</small>
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- 首页介绍 -->
+  <section id="intro">
+    <h1>📦 XIM Package Index</h1>
+    <b><p id="welcome-text">Welcome to XIM Package Index...</p></b>
+    <ul>
+      <li><b><a style="text-decoration: none" href="https://github.com/d2learn/xpkgindex">xpkgindex - </a></b>包索引网页生成工具</li>
+      <li><b><a style="text-decoration: none" href="https://github.com/d2learn/xlings">xlings - </a></b>包安装工具</li>
+      <li><b><a style="text-decoration: none" href="https://github.com/d2learn/xim-pkgindex">xim-pkgindex - </a></b>xpkg包描述文件仓库</li>
+      <li><b><a style="text-decoration: none" href="https://forum.d2learn.org">d2learn论坛 - </a></b>交流讨论</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="featured-pkg" style="text-align: center;">🔥 Featured Package</h2>
+    <div id="featured-package" class="featured-box"></div>
+  </section>
+
+  <section id="package-carousel">
+    <h2 id="pkg-activity" >🔍 Package Activity</h2>
+    <div class="carousel-container">
+      <!-- 行容器（JS 动态插入） -->
+    </div>
+  </section>
+
+</body>
+
+<footer>
+  {% include "footer.html" %}
+</footer>
+
+</html>
+
+<script>
+
+  const packageColorMap = {};  // 用于记录每个包的颜色
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const packages = [
+      {% for pkg in packages %}
+        { name: "{{ pkg.name }}" },
+      {% endfor %}
+    ];
+
+    const container = document.querySelector('.carousel-container');
+    const rows = 4;
+    const cardsPerRow = 6;
+    const rowDirections = ['left', 'right', 'left', 'right'];
+    const rowDurations = [18, 24, 20, 30]; // 每行速度不同（单位：秒）
+
+    // 🎨 随机透明背景颜色
+    function getRandomSemiTransparentColor() {
+      const r = Math.floor(Math.random() * 200);
+      const g = Math.floor(Math.random() * 200);
+      const b = Math.floor(Math.random() * 200);
+      const a = 0.2 + Math.random() * 0.3;
+      return `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`;
+    }
+
+    for (let r = 0; r < rows; r++) {
+      const row = document.createElement('div');
+      row.className = 'carousel-row';
+
+      const track = document.createElement('div');
+      track.className = 'carousel-track';
+
+      // 设置方向和动画
+      const direction = rowDirections[r % rowDirections.length];
+      const duration = rowDurations[r % rowDurations.length];
+      track.classList.add(`scroll-${direction}`);
+      track.style.animationDuration = `${duration}s`;
+
+      const startIndex = r * cardsPerRow;
+
+      // 添加卡片：原始 + 克隆（无缝滚动）
+      for (let i = 0; i < cardsPerRow * 2; i++) {
+        const pkg = packages[(startIndex + i) % packages.length];
+
+        const color = getRandomSemiTransparentColor();
+
+        // 记录颜色（只记录第一次出现的，避免被覆盖）
+        if (!packageColorMap[pkg.name]) {
+          packageColorMap[pkg.name] = color;
+        }
+
+        const link = document.createElement('a');
+        link.className = 'package-card';
+        link.href = `packages/${pkg.name}.html`;
+        link.textContent = pkg.name;
+        link.style.backgroundColor = color;
+
+        track.appendChild(link);
+      }
+
+      row.appendChild(track);
+      container.appendChild(row);
+    }
+  });
+
+  const allPackages = [
+    {% for pkg in packages %}
+      {
+        name: "{{ pkg.name }}",
+        version: "{{ pkg.version }}",
+        maintainers: "{{ pkg.maintainers }}",
+        licenses: "{{ pkg.licenses }}",
+        description: "{{ pkg.description }}",
+        keywords: [{% for tag in pkg.keywords %}"{{ tag }}",{% endfor %}],
+        categories: [{% for category in pkg.categories %}"{{ category }}",{% endfor %}],
+        install: "{{ pkg.install }}"
+      },
+    {% endfor %}
+  ];
+
+  function renderPackage(pkg) {
+    const container = document.getElementById("featured-package");
+
+    // 从映射中查找颜色，如果没有则使用默认色
+    const bgColor = packageColorMap[pkg.name] || '#f3f4f6';
+
+    const currentLang = localStorage.getItem('lang') || 'zh';
+    const copyText = currentLang === 'zh' ? '复制' : 'Copy';
+
+    container.innerHTML = `
+      <section class="section" style="background-color: ${bgColor}; border-radius: 8px; padding: 1.5rem;">
+        <h1>${pkg.name}</h1>
+        <div class="meta">
+          Version: <strong>${pkg.version}</strong> &nbsp;|&nbsp;
+          Maintainers: <strong>${ pkg.maintainers }</strong> &nbsp;|&nbsp;
+          Licenses: <strong>${pkg.licenses || 'unknown'}</strong>
+        </div>
+          <b><p>${pkg.description}</p></b>
+        <div class="tags">
+          ${pkg.categories.map(category => `<span class="category">${category}</span>`).join(" ")}
+          |
+          ${pkg.keywords.map(keyword => `<span class="keyword">${keyword}</span>`).join(" ")}
+        </div>
+        <div class="install-box">
+          <span>$ ${pkg.install}</span>
+          <button class="copy-btn" onclick="copyInstall(this, '${pkg.install}')">
+            <span id="copy-text">${copyText}</span>
+          </button>
+        </div>
+      </section>
+    `;
+  }
+
+  function randomPackage() {
+    const i = Math.floor(Math.random() * allPackages.length);
+    renderPackage(allPackages[i]);
+  }
+
+  // 每 5 秒切换一个包
+  document.addEventListener("DOMContentLoaded", () => {
+    // 等待 500ms 再开始轮换 featured package，确保颜色已生成
+    setTimeout(() => {
+      randomPackage(); // 初次加载
+      setInterval(randomPackage, 5000);
+    }, 500);
+  });
+
+</script>
+
+<style>
+  .featured-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background: #f9fafb;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .featured-box h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured-box .meta {
+    color: #475569;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .featured-box .tags {
+    margin: 1rem 0;
+  }
+
+  .featured-box .tag {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  .install-box {
+    background: #f1f5f9;
+    padding: 0.75rem;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: monospace;
+    margin-top: 1rem;
+  }
+
+  .copy-btn {
+    background: #0ea5e9;
+    border: none;
+    color: white;
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  .copy-btn:hover {
+    background: #0284c7;
+  }
+</style>

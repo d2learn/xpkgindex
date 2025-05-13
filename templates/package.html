@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ pkg.name }} - MyPackageIndex</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script defer src="../search.js"></script>
+  <script defer src="../language.js"></script>
+</head>
+<body>
+
+  {% include "top-bar.html" %}
+
+    <!-- 📦 悬浮搜索结果层 -->
+  <div id="package-list" class="search-float" style="display: none;">
+    {% for pkg in packages %}
+        <a class="package-item" href="{{ pkg.name }}.html" data-search="{{ pkg.name }} {{ pkg.description }} {{ pkg.keywords | join(' ') }}">
+          <strong>{{ pkg.name }}</strong> - {% for tag in pkg.keywords %} <span class="keyword">{{ tag }}</span> {% endfor %}<br>
+          <small>{{ pkg.description }}</small>
+        </a>
+    {% endfor %}
+  </div>
+
+  <section class="section">
+    <h1>{{ pkg.name }}</h1>
+    <div class="meta">
+      Version: <strong>{{ pkg.version }}</strong> &nbsp;|&nbsp;
+      Maintainers: <strong>{{ pkg.maintainers }}</strong> &nbsp;|&nbsp;
+      Licenses: <strong>{{ pkg.licenses }}</strong>
+    </div>
+    <b><p>{{ pkg.description }}</p></b>
+    <div class="tags">
+      {% for category in pkg.categories %}
+        <span class="category">{{ category }}</span>
+      {% endfor %}
+      |
+      {% for keyword in pkg.keywords %}
+        <span class="keyword">{{ keyword }}</span>
+      {% endfor %}
+    </div>
+    <div class="install-box">
+      <span>$ {{ pkg.install }}</span>
+      <button class="copy-btn" onclick="copyInstall(this, '{{ pkg.install }}')">Copy</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Dependencies</h2>
+    {% if pkg.dependencies %}
+      <ul class="deps">
+        {% for name, ver in pkg.dependencies.items() %}
+          <li><span>{{ name }}</span> <span>{{ ver }}</span></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No dependencies.</p>
+    {% endif %}
+  </section>
+
+  <section class="section">
+    <h2>Links</h2>
+    <div class="links">
+      {% for label, url in pkg.links.items() %}
+        <a href="{{ url }}" target="_blank">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </section>
+
+</body>
+
+<footer>
+  {% include "footer.html" %}
+</footer>
+
+</html>
