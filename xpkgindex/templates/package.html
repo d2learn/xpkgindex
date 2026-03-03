@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}{{ package.name }} - {{ config.title }}{% endblock %}
+
+{% block content %}
+<div class="pkg-detail">
+    <a href="../index.html" class="back-link">&larr; Back to packages</a>
+
+    <div class="pkg-header">
+        <h1 class="pkg-name">{{ package.name }}</h1>
+        <div class="pkg-badges">
+            <span class="badge badge-status badge-{{ package.status }}">{{ package.status }}</span>
+            <span class="badge badge-type">{{ package.type }}</span>
+        </div>
+    </div>
+
+    {% if install_command %}
+    <div class="install-box">
+        <code class="install-cmd" id="install-cmd">{{ install_command }}</code>
+        <button class="btn-copy" id="copy-btn" data-target="install-cmd" title="Copy to clipboard">Copy</button>
+    </div>
+    {% endif %}
+
+    {% if package.description %}
+    <section class="pkg-section">
+        <h2>Description</h2>
+        <p>{{ package.description }}</p>
+    </section>
+    {% endif %}
+
+    <section class="pkg-section">
+        <h2>Metadata</h2>
+        <div class="meta-grid">
+            {% if package.platforms %}
+                {% set versions = [] %}
+                {% for pname, pinfo in package.platforms.items() %}
+                    {% if pinfo.latest_version and pinfo.latest_version not in versions %}
+                        {% if versions.append(pinfo.latest_version) %}{% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if versions %}
+                <div class="meta-item">
+                    <span class="meta-label">Latest Version</span>
+                    <span class="meta-value">{{ versions[0] }}</span>
+                </div>
+                {% endif %}
+            {% endif %}
+            {% if package.licenses %}
+            <div class="meta-item">
+                <span class="meta-label">License</span>
+                <span class="meta-value">{{ package.licenses | join(', ') }}</span>
+            </div>
+            {% endif %}
+            {% if package.authors %}
+            <div class="meta-item">
+                <span class="meta-label">Authors</span>
+                <span class="meta-value">{{ package.authors | join(', ') }}</span>
+            </div>
+            {% endif %}
+            {% if package.maintainers %}
+            <div class="meta-item">
+                <span class="meta-label">Maintainers</span>
+                <span class="meta-value">{{ package.maintainers | join(', ') }}</span>
+            </div>
+            {% endif %}
+            {% if package.categories %}
+            <div class="meta-item">
+                <span class="meta-label">Categories</span>
+                <span class="meta-value">
+                    {% for cat in package.categories %}
+                    <span class="tag">{{ cat }}</span>
+                    {% endfor %}
+                </span>
+            </div>
+            {% endif %}
+            {% if package.keywords %}
+            <div class="meta-item">
+                <span class="meta-label">Keywords</span>
+                <span class="meta-value">
+                    {% for kw in package.keywords %}
+                    <span class="tag tag-keyword">{{ kw }}</span>
+                    {% endfor %}
+                </span>
+            </div>
+            {% endif %}
+            {% if package.archs %}
+            <div class="meta-item">
+                <span class="meta-label">Architectures</span>
+                <span class="meta-value">{{ package.archs | join(', ') }}</span>
+            </div>
+            {% endif %}
+            {% if package.programs %}
+            <div class="meta-item">
+                <span class="meta-label">Programs</span>
+                <span class="meta-value">{{ package.programs | join(', ') }}</span>
+            </div>
+            {% endif %}
+            <div class="meta-item">
+                <span class="meta-label">XVM Managed</span>
+                <span class="meta-value">{{ 'Yes' if package.xvm_enable else 'No' }}</span>
+            </div>
+        </div>
+    </section>
+
+    {% if package.platforms %}
+    <section class="pkg-section">
+        <h2>Platforms &amp; Versions</h2>
+        <div class="table-wrap">
+            <table class="platform-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Latest</th>
+                        <th>Available Versions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pname, pinfo in package.platforms.items() %}
+                    <tr>
+                        <td>
+                            {% if pname == 'linux' %}&#128039; Linux
+                            {% elif pname == 'windows' %}&#129695; Windows
+                            {% elif pname == 'macosx' %}&#127822; macOS
+                            {% else %}{{ pname }}
+                            {% endif %}
+                        </td>
+                        <td><span class="badge badge-version">{{ pinfo.latest_version or 'N/A' }}</span></td>
+                        <td>{{ pinfo.versions | join(', ') if pinfo.versions else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% set all_deps = [] %}
+    {% for pname, pinfo in package.platforms.items() %}
+        {% for dep in pinfo.deps %}
+            {% if dep not in all_deps %}
+                {% if all_deps.append(dep) %}{% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    {% if all_deps %}
+    <section class="pkg-section">
+        <h2>Dependencies</h2>
+        <ul class="dep-list">
+            {% for dep in all_deps %}
+            <li>{{ dep }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% endif %}
+
+    {% if package.homepage or package.repo or package.docs %}
+    <section class="pkg-section">
+        <h2>Links</h2>
+        <div class="pkg-links">
+            {% if package.homepage %}
+            <a href="{{ package.homepage }}" target="_blank" rel="noopener" class="pkg-link">Homepage</a>
+            {% endif %}
+            {% if package.repo %}
+            <a href="{{ package.repo }}" target="_blank" rel="noopener" class="pkg-link">Repository</a>
+            {% endif %}
+            {% if package.docs %}
+            <a href="{{ package.docs }}" target="_blank" rel="noopener" class="pkg-link">Documentation</a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/js/clipboard.js"></script>
+{% endblock %}

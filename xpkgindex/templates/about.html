@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}About - {{ config.title }}{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <h1 class="about-title">{{ config.project_name or config.title }}</h1>
+
+    {% if config.about_description %}
+    <section class="about-section">
+        <h2>About</h2>
+        <p>{{ config.about_description }}</p>
+    </section>
+    {% endif %}
+
+    {% if config.project_url or config.github %}
+    <section class="about-section">
+        <h2>Repository</h2>
+        <div class="about-links">
+            {% if config.project_url %}
+            <a href="{{ config.project_url }}" target="_blank" rel="noopener" class="pkg-link">Project Homepage</a>
+            {% endif %}
+            {% if config.github %}
+            <a href="{{ config.github }}" target="_blank" rel="noopener" class="pkg-link">GitHub Repository</a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if config.maintainers %}
+    <section class="about-section">
+        <h2>Maintainers</h2>
+        <ul class="maintainer-list">
+            {% for m in config.maintainers %}
+            <li>{{ m }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    {% if config.license %}
+    <section class="about-section">
+        <h2>License</h2>
+        <p>{{ config.license }}</p>
+    </section>
+    {% endif %}
+
+    <section class="about-section about-footer">
+        <p>Built with <a href="https://github.com/d2learn/xpkgindex" target="_blank" rel="noopener">xpkgindex</a></p>
+    </section>
+</div>
+{% endblock %}

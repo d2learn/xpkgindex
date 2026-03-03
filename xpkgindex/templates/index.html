@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.title }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1 class="hero-title">{{ config.title }}</h1>
+    <p class="hero-desc">{{ config.description }}</p>
+    <div class="hero-stats">
+        <span class="stat"><strong>{{ total_packages }}</strong> packages</span>
+        <span class="stat-sep">&middot;</span>
+        <span class="stat"><strong>{{ total_categories }}</strong> categories</span>
+    </div>
+    <div class="hero-search">
+        <input type="text" id="search-input" placeholder="Search packages by name, description, or keyword..." autocomplete="off">
+    </div>
+</section>
+
+{% set all_categories = [] %}
+{% for pkg in packages %}
+    {% for cat in pkg.categories %}
+        {% if cat not in all_categories %}
+            {% if all_categories.append(cat) %}{% endif %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% if all_categories %}
+<section class="filters">
+    <button class="filter-btn active" data-category="all">All</button>
+    {% for cat in all_categories | sort %}
+    <button class="filter-btn" data-category="{{ cat }}">{{ cat }}</button>
+    {% endfor %}
+</section>
+{% endif %}
+
+<section class="package-grid" id="package-grid">
+    {% for pkg in packages %}
+    <a href="packages/{{ pkg.name | safe_filename }}.html" class="package-card"
+       data-name="{{ pkg.name | lower }}"
+       data-description="{{ pkg.description | lower }}"
+       data-keywords="{{ pkg.keywords | join(' ') | lower }}"
+       data-categories="{{ pkg.categories | join(' ') }}">
+        <div class="card-header">
+            <h3 class="card-name">{{ pkg.name }}</h3>
+            <div class="card-badges">
+                {% if pkg.platforms %}
+                    {% set latest = [] %}
+                    {% for pname, pinfo in pkg.platforms.items() %}
+                        {% if pinfo.latest_version and pinfo.latest_version not in latest %}
+                            {% if latest.append(pinfo.latest_version) %}{% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if latest %}
+                    <span class="badge badge-version">{{ latest[0] }}</span>
+                    {% endif %}
+                {% endif %}
+                <span class="badge badge-status badge-{{ pkg.status }}">{{ pkg.status }}</span>
+            </div>
+        </div>
+        <p class="card-desc">{{ pkg.description | truncate(120) if pkg.description else 'No description' }}</p>
+        <div class="card-footer">
+            <div class="card-platforms">
+                {% if 'linux' in pkg.platforms %}<span title="Linux">&#128039;</span>{% endif %}
+                {% if 'windows' in pkg.platforms %}<span title="Windows">&#129695;</span>{% endif %}
+                {% if 'macosx' in pkg.platforms %}<span title="macOS">&#127822;</span>{% endif %}
+            </div>
+            <div class="card-tags">
+                {% for cat in pkg.categories[:3] %}
+                <span class="tag">{{ cat }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</section>
+
+<div id="no-results" class="no-results" style="display:none;">
+    <p>No packages match your search.</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="./static/js/search.js"></script>
+{% endblock %}

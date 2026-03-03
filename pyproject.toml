@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "xpkgindex"
+version = "0.1.0"
+description = "Static site generator for xpkg package indexes"
+requires-python = ">=3.8"
+dependencies = ["jinja2>=3.0", "lupa>=2.0"]
+
+[project.scripts]
+xpkgindex = "xpkgindex.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["xpkgindex*"]
+
+[tool.setuptools.package-data]
+xpkgindex = ["templates/**/*.html", "static/**/*"]
