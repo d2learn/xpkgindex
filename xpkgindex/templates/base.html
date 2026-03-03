@@ -28,15 +28,13 @@
         <div class="nav-inner">
             <a href="{{ base }}/index.html" class="nav-logo">{{ config.logo }}</a>
 
-            {% if current_page != 'home' and current_page != 'about' %}
             <div class="nav-search">
                 <input type="text" id="nav-search-input" placeholder="Search packages&hellip;" autocomplete="off" aria-label="Search packages">
                 <div class="search-dropdown" id="search-dropdown"></div>
             </div>
-            {% endif %}
 
-            <div class="nav-actions">
-                {# Platform dropdown selector #}
+            {# Desktop nav actions #}
+            <div class="nav-actions nav-desktop">
                 {% if current_page == 'home' %}
                 <div class="platform-dropdown" id="platform-dropdown">
                     <button class="platform-dropdown-btn" id="platform-dropdown-btn" aria-label="Filter by platform" aria-expanded="false">
@@ -52,7 +50,6 @@
                     </div>
                 </div>
                 {% endif %}
-
                 <button id="theme-toggle" class="btn-icon" title="Toggle theme" aria-label="Toggle theme">
                     <span class="icon-sun">&#9728;</span>
                     <span class="icon-moon">&#9790;</span>
@@ -68,6 +65,54 @@
                 </a>
                 {% endif %}
                 <a href="{{ base }}/about.html" class="nav-link">About</a>
+            </div>
+
+            {# Mobile: platform icon + hamburger #}
+            <div class="nav-mobile-actions">
+                {% if current_page == 'home' %}
+                <div class="platform-dropdown" id="platform-dropdown-mobile">
+                    <button class="platform-dropdown-btn" id="platform-dropdown-btn-mobile" aria-label="Filter by platform" aria-expanded="false">
+                        <span class="platform-dropdown-icon" id="platform-dropdown-icon-mobile">{{ icon_linux(14) }}</span>
+                    </button>
+                    <div class="platform-dropdown-menu" id="platform-dropdown-menu-mobile">
+                        <button class="platform-dropdown-item active" data-platform="all">All Platforms</button>
+                        <button class="platform-dropdown-item" data-platform="linux">{{ icon_linux(14) }} Linux</button>
+                        <button class="platform-dropdown-item" data-platform="windows">{{ icon_windows(14) }} Windows</button>
+                        <button class="platform-dropdown-item" data-platform="macosx">{{ icon_macos(14) }} macOS</button>
+                    </div>
+                </div>
+                {% endif %}
+                <button class="btn-icon nav-menu-toggle" id="nav-menu-toggle" aria-label="Menu" aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+            </div>
+
+            {# Mobile dropdown menu #}
+            <div class="nav-mobile-menu" id="nav-mobile-menu">
+                <div class="nav-mobile-search">
+                    <input type="text" id="nav-mobile-search-input" placeholder="Search packages&hellip;" autocomplete="off" aria-label="Search packages">
+                    <div class="search-dropdown" id="search-dropdown-mobile"></div>
+                </div>
+                <div class="nav-mobile-links">
+                    <button id="theme-toggle-mobile" class="nav-mobile-item" aria-label="Toggle theme">
+                        <span class="icon-sun">&#9728;</span>
+                        <span class="icon-moon">&#9790;</span>
+                        <span>Theme</span>
+                    </button>
+                    {% if config.github %}
+                    <a href="{{ config.github }}" class="nav-mobile-item" target="_blank" rel="noopener">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        GitHub
+                    </a>
+                    {% endif %}
+                    {% if config.forum %}
+                    <a href="{{ config.forum }}" class="nav-mobile-item" target="_blank" rel="noopener">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                        Forum
+                    </a>
+                    {% endif %}
+                    <a href="{{ base }}/about.html" class="nav-mobile-item">About</a>
+                </div>
             </div>
         </div>
     </nav>

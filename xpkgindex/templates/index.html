@@ -7,10 +7,11 @@
     <h1 class="hero-title">{{ config.title }}</h1>
     <p class="hero-desc">{{ config.description }}</p>
 
-    {% if config.project_name or config.github or config.license %}
+    {% if config.project_name or config.github %}
     <div class="hero-meta">
         {% if config.project_name %}
-        <a href="{{ config.project_url or '#' }}" class="hero-meta-link" target="_blank" rel="noopener">{{ config.project_name }}</a>
+        <a href="{{ config.project_url or '#' }}" class="hero-meta-link hero-meta-brand" target="_blank" rel="noopener">{{ config.project_name }}</a>
+        <span class="hero-meta-sep">|</span>
         {% endif %}
         {% if config.github %}
         <a href="{{ config.github }}" class="hero-meta-link" target="_blank" rel="noopener">
@@ -30,9 +31,6 @@
             Forum
         </a>
         {% endif %}
-        {% if config.license %}
-        <span class="badge badge-license">{{ config.license }}</span>
-        {% endif %}
     </div>
     {% endif %}
 
@@ -43,23 +41,22 @@
     </div>
 
     {% if config.install_commands %}
-    <div class="hero-install" id="hero-install">
-        <span class="hero-install-label">$ </span>
-        <code class="hero-install-cmd" id="install-cmd-unix">{{ config.install_commands.get('unix', '') }}</code>
-        <code class="hero-install-cmd" id="install-cmd-windows" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
-        <button class="hero-install-copy btn-copy" data-target="install-cmd-unix" aria-label="Copy install command" title="Copy">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+    <div class="hero-install-wrap">
+        <button class="hero-install-platform" id="install-os-toggle" aria-label="Switch platform" title="Click to switch platform">
+            <span id="install-os-icon">{{ icon_linux(16) }}</span>
         </button>
-        <button class="hero-install-toggle" id="install-os-toggle" aria-label="Switch platform">
-            <span id="install-os-label">{{ icon_linux(12) }} {{ icon_macos(12) }}</span>
-        </button>
+        <div class="hero-install" id="hero-install">
+            <span class="hero-install-label">$ </span>
+            <code class="hero-install-cmd" id="install-cmd-unix">{{ config.install_commands.get('unix', '') }}</code>
+            <code class="hero-install-cmd" id="install-cmd-windows" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
+            <button class="hero-install-copy btn-copy" data-target="install-cmd-unix" aria-label="Copy install command" title="Copy">
+                <svg class="copy-icon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+                <svg class="check-icon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="display:none;"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></svg>
+            </button>
+        </div>
     </div>
     {% endif %}
 
-    <div class="hero-search">
-        <input type="text" id="search-input" placeholder="Search packages by name, description, or keyword&hellip;" autocomplete="off" aria-label="Search packages">
-        <div class="search-dropdown search-dropdown-hero" id="search-dropdown"></div>
-    </div>
 </section>
 
 {% set all_categories = [] %}

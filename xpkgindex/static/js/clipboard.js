@@ -32,10 +32,21 @@
     }
 
     function showFeedback(btn) {
-        var original = btn.textContent;
-        btn.textContent = "Copied!";
-        setTimeout(function () {
-            btn.textContent = original;
-        }, 2000);
+        var copyIcon = btn.querySelector(".copy-icon");
+        var checkIcon = btn.querySelector(".check-icon");
+        if (copyIcon && checkIcon) {
+            copyIcon.style.display = "none";
+            checkIcon.style.display = "";
+            setTimeout(function () {
+                copyIcon.style.display = "";
+                checkIcon.style.display = "none";
+            }, 2000);
+        } else {
+            var original = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(function () {
+                btn.textContent = original;
+            }, 2000);
+        }
     }
 })();
