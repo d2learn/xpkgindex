@@ -11,9 +11,63 @@
         <span class="stat-sep">&middot;</span>
         <span class="stat"><strong>{{ total_categories }}</strong> categories</span>
     </div>
+
+    {% if config.project_name or config.github or config.docs_url or config.license %}
+    <div class="repo-info">
+        {% if config.project_name %}
+        <span class="repo-info-item">
+            {% if config.project_url %}
+            <a href="{{ config.project_url }}" target="_blank" rel="noopener">{{ config.project_name }}</a>
+            {% else %}
+            {{ config.project_name }}
+            {% endif %}
+            {% if config.about_description %}<span class="repo-info-sep">&mdash;</span> {{ config.about_description }}{% endif %}
+        </span>
+        {% endif %}
+        {% if config.github %}
+        <span class="repo-info-sep">&middot;</span>
+        <a href="{{ config.github }}" target="_blank" rel="noopener" class="repo-info-link">GitHub</a>
+        {% endif %}
+        {% if config.docs_url %}
+        <span class="repo-info-sep">&middot;</span>
+        <a href="{{ config.docs_url }}" target="_blank" rel="noopener" class="repo-info-link">Docs</a>
+        {% endif %}
+        {% if config.forum %}
+        <span class="repo-info-sep">&middot;</span>
+        <a href="{{ config.forum }}" target="_blank" rel="noopener" class="repo-info-link">Forum</a>
+        {% endif %}
+        {% if config.license %}
+        <span class="repo-info-sep">&middot;</span>
+        <span class="badge badge-license">{{ config.license }}</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
     <div class="hero-search">
         <input type="text" id="search-input" placeholder="Search packages by name, description, or keyword..." autocomplete="off">
     </div>
+</section>
+
+{% if config.install_commands %}
+<section class="install-section">
+    <h2 class="install-title">Get Started with xlings</h2>
+    <div class="install-tabs">
+        <button class="install-tab active" data-install-tab="unix">{{ icon_linux(14) }} {{ icon_macos(14) }} Linux / macOS</button>
+        <button class="install-tab" data-install-tab="windows">{{ icon_windows(14) }} Windows</button>
+    </div>
+    <div class="install-box">
+        <code class="install-cmd" id="install-cmd-unix">{{ config.install_commands.get('unix', '') }}</code>
+        <code class="install-cmd" id="install-cmd-windows" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
+        <button class="btn-copy" data-target="install-cmd-unix" title="Copy to clipboard">Copy</button>
+    </div>
+</section>
+{% endif %}
+
+<section class="platform-filters">
+    <button class="platform-btn active" data-platform="all">All</button>
+    <button class="platform-btn" data-platform="linux">{{ icon_linux(14) }} Linux</button>
+    <button class="platform-btn" data-platform="windows">{{ icon_windows(14) }} Windows</button>
+    <button class="platform-btn" data-platform="macosx">{{ icon_macos(14) }} macOS</button>
 </section>
 
 {% set all_categories = [] %}
@@ -40,7 +94,8 @@
        data-name="{{ pkg.name | lower }}"
        data-description="{{ pkg.description | lower }}"
        data-keywords="{{ pkg.keywords | join(' ') | lower }}"
-       data-categories="{{ pkg.categories | join(' ') }}">
+       data-categories="{{ pkg.categories | join(' ') }}"
+       data-platforms="{{ pkg.platforms.keys() | join(' ') }}">
         <div class="card-header">
             <h3 class="card-name">{{ pkg.name }}</h3>
             <div class="card-badges">
@@ -61,9 +116,9 @@
         <p class="card-desc">{{ pkg.description | truncate(120) if pkg.description else 'No description' }}</p>
         <div class="card-footer">
             <div class="card-platforms">
-                {% if 'linux' in pkg.platforms %}<span title="Linux">&#128039;</span>{% endif %}
-                {% if 'windows' in pkg.platforms %}<span title="Windows">&#129695;</span>{% endif %}
-                {% if 'macosx' in pkg.platforms %}<span title="macOS">&#127822;</span>{% endif %}
+                {% if 'linux' in pkg.platforms %}<span title="Linux">{{ icon_linux(16) }}</span>{% endif %}
+                {% if 'windows' in pkg.platforms %}<span title="Windows">{{ icon_windows(16) }}</span>{% endif %}
+                {% if 'macosx' in pkg.platforms %}<span title="macOS">{{ icon_macos(16) }}</span>{% endif %}
             </div>
             <div class="card-tags">
                 {% for cat in pkg.categories[:3] %}
@@ -81,5 +136,23 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="./static/js/search.js"></script>
+<script>
+(function() {
+    // Auto-detect OS for install command tabs
+    var tabs = document.querySelectorAll('.install-tab');
+    if (tabs.length > 0) {
+        var ua = navigator.userAgent || navigator.platform || '';
+        var isWindows = /Win/i.test(ua);
+        if (isWindows) {
+            // Click the windows tab
+            for (var i = 0; i < tabs.length; i++) {
+                if (tabs[i].getAttribute('data-install-tab') === 'windows') {
+                    tabs[i].click();
+                    break;
+                }
+            }
+        }
+    }
+})();
+</script>
 {% endblock %}

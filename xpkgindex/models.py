@@ -59,3 +59,6 @@ class SiteConfig:
     # Build
     install_command_template: str = "xlings install {name}@{version}"
     pkgs_dir: str = "pkgs"
+
+    # Install commands (for homepage install section)
+    install_commands: Dict[str, str] = field(default_factory=dict)

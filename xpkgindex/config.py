@@ -39,4 +39,6 @@ def load_config(directory: str) -> SiteConfig:
     config.install_command_template = data.get("install_command_template", config.install_command_template)
     config.pkgs_dir = data.get("pkgs_dir", config.pkgs_dir)
 
+    config.install_commands = data.get("install_commands", {})
+
     return config

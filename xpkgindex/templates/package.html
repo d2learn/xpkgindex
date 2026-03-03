@@ -118,9 +118,9 @@
                     {% for pname, pinfo in package.platforms.items() %}
                     <tr>
                         <td>
-                            {% if pname == 'linux' %}&#128039; Linux
-                            {% elif pname == 'windows' %}&#129695; Windows
-                            {% elif pname == 'macosx' %}&#127822; macOS
+                            {% if pname == 'linux' %}{{ icon_linux(16) }} Linux
+                            {% elif pname == 'windows' %}{{ icon_windows(16) }} Windows
+                            {% elif pname == 'macosx' %}{{ icon_macos(16) }} macOS
                             {% else %}{{ pname }}
                             {% endif %}
                         </td>
@@ -172,6 +172,3 @@
 </div>
 {% endblock %}
 
-{% block scripts %}
-<script src="../static/js/clipboard.js"></script>
-{% endblock %}

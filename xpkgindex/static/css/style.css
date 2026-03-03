@@ -33,6 +33,13 @@ body {
 a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--accent-hover); }
 
+/* === Platform Icons === */
+.platform-icon {
+    display: inline-block;
+    vertical-align: middle;
+    fill: currentColor;
+}
+
 /* === Navbar === */
 .navbar {
     background: var(--bg-nav); border-bottom: 1px solid var(--border-card);
@@ -47,7 +54,7 @@ a:hover { color: var(--accent-hover); }
     white-space: nowrap; flex-shrink: 0;
 }
 .nav-logo:hover { color: var(--accent-hover); }
-.nav-search { flex: 1; max-width: 400px; margin: 0 auto; }
+.nav-search { flex: 1; max-width: 400px; margin: 0 auto; position: relative; }
 .nav-search input {
     width: 100%; padding: 0.4rem 0.8rem; background: var(--bg-input);
     border: 1px solid var(--border-card); border-radius: var(--radius);
@@ -77,6 +84,53 @@ a:hover { color: var(--accent-hover); }
 [data-theme="light"] .icon-sun { display: inline; }
 [data-theme="light"] .icon-moon { display: none; }
 
+/* === Search Dropdown === */
+.search-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    margin-top: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 200;
+}
+.search-result {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.8rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-card);
+    transition: background var(--transition);
+}
+.search-result:last-child { border-bottom: none; }
+.search-result:hover { background: var(--bg-card-hover); }
+.search-result-name {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.85rem;
+}
+.search-result-icons {
+    display: flex;
+    gap: 0.25rem;
+    color: var(--text-muted);
+}
+.search-result-desc {
+    width: 100%;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* === Main Content === */
 .main-content {
     flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem;
@@ -93,10 +147,33 @@ a:hover { color: var(--accent-hover); }
 .hero-desc { color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 1rem; }
 .hero-stats {
     display: flex; justify-content: center; gap: 0.5rem;
-    color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;
+    color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;
 }
 .hero-stats strong { color: var(--accent); }
 .stat-sep { color: var(--text-muted); }
+
+/* === Repo Info === */
+.repo-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+.repo-info a { color: var(--accent); }
+.repo-info a:hover { color: var(--accent-hover); }
+.repo-info-sep { color: var(--text-muted); }
+.repo-info-link { font-weight: 500; }
+.badge-license {
+    color: var(--accent-secondary);
+    border: 1px solid var(--accent-secondary);
+    background: transparent;
+    font-size: 0.65rem;
+}
+
 .hero-search { max-width: 560px; margin: 0 auto; }
 .hero-search input {
     width: 100%; padding: 0.75rem 1.2rem; background: var(--bg-card);
@@ -107,6 +184,96 @@ a:hover { color: var(--accent-hover); }
 .hero-search input:focus {
     border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,212,255,0.15);
 }
+
+/* === Install Section === */
+.install-section {
+    max-width: 640px;
+    margin: 0 auto 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+}
+.install-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+.install-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    justify-content: center;
+}
+.install-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg-badge);
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.install-tab:hover { border-color: var(--accent); color: var(--accent); }
+.install-tab.active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+.install-tab.active .platform-icon { fill: var(--bg-primary); }
+.install-section .install-box {
+    display: flex;
+    align-items: center;
+    background: var(--bg-code);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+    margin-bottom: 0;
+}
+.install-section .install-cmd {
+    flex: 1;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    word-break: break-all;
+}
+
+/* === Platform Filters === */
+.platform-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 0 0 0.75rem;
+}
+.platform-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.platform-btn:hover { border-color: var(--accent); color: var(--accent); }
+.platform-btn.active {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+.platform-btn.active .platform-icon { fill: var(--bg-primary); }
 
 /* === Filters === */
 .filters {
@@ -148,7 +315,7 @@ a:hover { color: var(--accent-hover); }
 .card-footer {
     display: flex; justify-content: space-between; align-items: center; margin-top: auto;
 }
-.card-platforms { display: flex; gap: 0.3rem; font-size: 1rem; }
+.card-platforms { display: flex; gap: 0.4rem; font-size: 1rem; color: var(--text-secondary); }
 .card-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 
 /* === Badges === */
@@ -298,6 +465,10 @@ a:hover { color: var(--accent-hover); }
     .meta-grid { grid-template-columns: 1fr; }
     .pkg-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
     .footer-inner { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .repo-info { font-size: 0.78rem; }
+    .install-section { padding: 1rem; }
+    .platform-filters { gap: 0.35rem; }
+    .platform-btn { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
 }
 @media (max-width: 480px) {
     .main-content { padding: 1rem; }
