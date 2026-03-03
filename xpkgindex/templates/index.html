@@ -44,49 +44,51 @@
     {% endif %}
 
     <div class="hero-search">
-        <input type="text" id="search-input" placeholder="Search packages by name, description, or keyword..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="Search packages by name, description, or keyword&hellip;" autocomplete="off" aria-label="Search packages">
     </div>
 </section>
 
 {% if config.install_commands %}
-<section class="install-section">
+<section class="install-section" aria-label="Install xlings">
     <h2 class="install-title">Get Started with xlings</h2>
-    <div class="install-tabs">
-        <button class="install-tab active" data-install-tab="unix">{{ icon_linux(14) }} {{ icon_macos(14) }} Linux / macOS</button>
-        <button class="install-tab" data-install-tab="windows">{{ icon_windows(14) }} Windows</button>
+    <div class="install-tabs" role="tablist">
+        <button class="install-tab active" data-install-tab="unix" role="tab" aria-selected="true" aria-controls="install-cmd-unix">{{ icon_linux(14) }} {{ icon_macos(14) }} Linux / macOS</button>
+        <button class="install-tab" data-install-tab="windows" role="tab" aria-selected="false" aria-controls="install-cmd-windows">{{ icon_windows(14) }} Windows</button>
     </div>
-    <div class="install-box">
-        <code class="install-cmd" id="install-cmd-unix">{{ config.install_commands.get('unix', '') }}</code>
-        <code class="install-cmd" id="install-cmd-windows" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
-        <button class="btn-copy" data-target="install-cmd-unix" title="Copy to clipboard">Copy</button>
+    <div class="install-cmd-box">
+        <code class="install-cmd" id="install-cmd-unix" role="tabpanel">{{ config.install_commands.get('unix', '') }}</code>
+        <code class="install-cmd" id="install-cmd-windows" role="tabpanel" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
+        <button class="btn-copy" data-target="install-cmd-unix" title="Copy to clipboard" aria-label="Copy install command">Copy</button>
     </div>
 </section>
 {% endif %}
 
-<section class="platform-filters">
-    <button class="platform-btn active" data-platform="all">All</button>
-    <button class="platform-btn" data-platform="linux">{{ icon_linux(14) }} Linux</button>
-    <button class="platform-btn" data-platform="windows">{{ icon_windows(14) }} Windows</button>
-    <button class="platform-btn" data-platform="macosx">{{ icon_macos(14) }} macOS</button>
-</section>
+<div class="filter-bar">
+    <section class="platform-filters" role="toolbar" aria-label="Filter by platform">
+        <button class="platform-btn active" data-platform="all">All</button>
+        <button class="platform-btn" data-platform="linux">{{ icon_linux(14) }} Linux</button>
+        <button class="platform-btn" data-platform="windows">{{ icon_windows(14) }} Windows</button>
+        <button class="platform-btn" data-platform="macosx">{{ icon_macos(14) }} macOS</button>
+    </section>
 
-{% set all_categories = [] %}
-{% for pkg in packages %}
-    {% for cat in pkg.categories %}
-        {% if cat not in all_categories %}
-            {% if all_categories.append(cat) %}{% endif %}
-        {% endif %}
+    {% set all_categories = [] %}
+    {% for pkg in packages %}
+        {% for cat in pkg.categories %}
+            {% if cat not in all_categories %}
+                {% if all_categories.append(cat) %}{% endif %}
+            {% endif %}
+        {% endfor %}
     {% endfor %}
-{% endfor %}
 
-{% if all_categories %}
-<section class="filters">
-    <button class="filter-btn active" data-category="all">All</button>
-    {% for cat in all_categories | sort %}
-    <button class="filter-btn" data-category="{{ cat }}">{{ cat }}</button>
-    {% endfor %}
-</section>
-{% endif %}
+    {% if all_categories %}
+    <section class="filters" role="toolbar" aria-label="Filter by category">
+        <button class="filter-btn active" data-category="all">All</button>
+        {% for cat in all_categories | sort %}
+        <button class="filter-btn" data-category="{{ cat }}">{{ cat }}</button>
+        {% endfor %}
+    </section>
+    {% endif %}
+</div>
 
 <section class="package-grid" id="package-grid">
     {% for pkg in packages %}
@@ -144,7 +146,6 @@
         var ua = navigator.userAgent || navigator.platform || '';
         var isWindows = /Win/i.test(ua);
         if (isWindows) {
-            // Click the windows tab
             for (var i = 0; i < tabs.length; i++) {
                 if (tabs[i].getAttribute('data-install-tab') === 'windows') {
                     tabs[i].click();

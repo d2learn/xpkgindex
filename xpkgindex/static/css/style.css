@@ -9,6 +9,7 @@
     --status-stable: #22c55e; --status-dev: #eab308; --status-deprecated: #ef4444;
     --shadow: 0 2px 8px rgba(0,0,0,0.4);
     --radius: 8px; --radius-sm: 4px; --transition: 0.2s ease;
+    color-scheme: dark;
 }
 
 /* === Light theme === */
@@ -20,6 +21,7 @@
     --bg-input: #ffffff; --bg-nav: #ededf2; --bg-footer: #e5e5ea;
     --bg-badge: #ededf2; --bg-code: #ededf2;
     --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    color-scheme: light;
 }
 
 /* === Reset & Base === */
@@ -33,11 +35,19 @@ body {
 a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--accent-hover); }
 
+/* === Focus visible === */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+input:focus-visible { outline: none; border-color: var(--accent); }
+
 /* === Platform Icons === */
 .platform-icon {
     display: inline-block;
     vertical-align: middle;
     fill: currentColor;
+    flex-shrink: 0;
 }
 
 /* === Navbar === */
@@ -137,14 +147,18 @@ a:hover { color: var(--accent-hover); }
 }
 
 /* === Hero === */
-.hero { text-align: center; padding: 2.5rem 0 2rem; }
+.hero { text-align: center; padding: 2.5rem 0 1.5rem; }
 .hero-title {
     font-size: 2.2rem; font-weight: 800;
     background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text; margin-bottom: 0.5rem;
+    text-wrap: balance;
 }
-.hero-desc { color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 1rem; }
+.hero-desc {
+    color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 1rem;
+    text-wrap: balance;
+}
 .hero-stats {
     display: flex; justify-content: center; gap: 0.5rem;
     color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;
@@ -188,7 +202,7 @@ a:hover { color: var(--accent-hover); }
 /* === Install Section === */
 .install-section {
     max-width: 640px;
-    margin: 0 auto 2rem;
+    margin: 0 auto 1.5rem;
     background: var(--bg-card);
     border: 1px solid var(--border-card);
     border-radius: var(--radius);
@@ -218,7 +232,7 @@ a:hover { color: var(--accent-hover); }
     border-radius: 999px;
     font-size: 0.8rem;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: border-color var(--transition), color var(--transition), background var(--transition);
 }
 .install-tab:hover { border-color: var(--accent); color: var(--accent); }
 .install-tab.active {
@@ -227,7 +241,7 @@ a:hover { color: var(--accent-hover); }
     border-color: var(--accent);
 }
 .install-tab.active .platform-icon { fill: var(--bg-primary); }
-.install-section .install-box {
+.install-cmd-box {
     display: flex;
     align-items: center;
     background: var(--bg-code);
@@ -235,14 +249,21 @@ a:hover { color: var(--accent-hover); }
     border-radius: var(--radius);
     padding: 0.75rem 1rem;
     gap: 0.75rem;
-    margin-bottom: 0;
 }
-.install-section .install-cmd {
+.install-cmd-box .install-cmd {
     flex: 1;
     font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
     font-size: 0.85rem;
     color: var(--accent);
     word-break: break-all;
+}
+
+/* === Filter Bar === */
+.filter-bar {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 /* === Platform Filters === */
@@ -251,7 +272,7 @@ a:hover { color: var(--accent-hover); }
     flex-wrap: wrap;
     gap: 0.5rem;
     justify-content: center;
-    padding: 0 0 0.75rem;
+    padding: 0;
 }
 .platform-btn {
     display: inline-flex;
@@ -265,7 +286,7 @@ a:hover { color: var(--accent-hover); }
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: border-color var(--transition), color var(--transition), background var(--transition);
 }
 .platform-btn:hover { border-color: var(--accent); color: var(--accent); }
 .platform-btn.active {
@@ -275,16 +296,16 @@ a:hover { color: var(--accent-hover); }
 }
 .platform-btn.active .platform-icon { fill: var(--bg-primary); }
 
-/* === Filters === */
+/* === Category Filters === */
 .filters {
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
-    justify-content: center; padding: 0.5rem 0 1.5rem;
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    justify-content: center; padding: 0;
 }
 .filter-btn {
     background: var(--bg-card); border: 1px solid var(--border-card);
-    color: var(--text-secondary); padding: 0.35rem 0.9rem;
-    border-radius: 999px; font-size: 0.8rem; cursor: pointer;
-    transition: all var(--transition);
+    color: var(--text-secondary); padding: 0.25rem 0.7rem;
+    border-radius: 999px; font-size: 0.75rem; cursor: pointer;
+    transition: border-color var(--transition), color var(--transition), background var(--transition);
 }
 .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
 .filter-btn.active {
@@ -354,7 +375,7 @@ a:hover { color: var(--accent-hover); }
 .pkg-name { font-size: 1.8rem; font-weight: 800; }
 .pkg-badges { display: flex; gap: 0.5rem; }
 
-/* Install box */
+/* Install box (package detail) */
 .install-box {
     display: flex; align-items: center; background: var(--bg-code);
     border: 1px solid var(--border-card); border-radius: var(--radius);
@@ -474,4 +495,13 @@ a:hover { color: var(--accent-hover); }
     .main-content { padding: 1rem; }
     .nav-inner { padding: 0 1rem; }
     .hero { padding: 1.5rem 0 1rem; }
+}
+
+/* === Reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
 }

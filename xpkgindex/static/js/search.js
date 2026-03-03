@@ -17,14 +17,16 @@
     var installTabs = document.querySelectorAll(".install-tab");
     var installCmdUnix = document.getElementById("install-cmd-unix");
     var installCmdWindows = document.getElementById("install-cmd-windows");
-    var copyBtn = document.querySelector(".install-section .btn-copy");
+    var copyBtn = document.querySelector(".install-cmd-box .btn-copy");
 
     for (var t = 0; t < installTabs.length; t++) {
         installTabs[t].addEventListener("click", function () {
             for (var j = 0; j < installTabs.length; j++) {
                 installTabs[j].classList.remove("active");
+                installTabs[j].setAttribute("aria-selected", "false");
             }
             this.classList.add("active");
+            this.setAttribute("aria-selected", "true");
             var tab = this.getAttribute("data-install-tab");
             if (installCmdUnix && installCmdWindows && copyBtn) {
                 if (tab === "windows") {
@@ -148,7 +150,6 @@
         for (var s = 0; s < scripts.length; s++) {
             var src = scripts[s].src || "";
             if (src.indexOf("search.js") !== -1) {
-                // Extract base from script src path
                 var idx = src.indexOf("/static/js/search.js");
                 if (idx !== -1) {
                     base = src.substring(0, idx);
@@ -175,14 +176,18 @@
         xhr.send();
     }
 
+    // Bootstrap Icons SVG paths for dropdown results
+    var iconSvgs = {
+        linux: '<svg class="platform-icon" width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8.996 4.497c.104-.076.1-.168.186-.158s.022.102-.098.207c-.12.104-.308.243-.46.323-.291.152-.631.336-.993.336s-.647-.167-.853-.33c-.102-.082-.186-.162-.248-.221-.11-.086-.096-.207-.052-.204.075.01.087.109.134.153.064.06.144.137.241.214.195.154.454.304.778.304s.702-.19.932-.32c.13-.073.297-.204.433-.304"/><path fill-rule="evenodd" d="M8.446.019c2.521.003 2.38 2.66 2.364 4.093-.01.939.509 1.574 1.04 2.244.474.56 1.095 1.38 1.45 2.32.29.765.402 1.613.115 2.465a.8.8 0 0 1 .254.152l.001.002c.207.175.271.447.329.698.058.252.112.488.224.615.344.382.494.667.48.922-.015.254-.203.43-.435.57-.465.28-1.164.491-1.586 1.002-.443.527-.99.83-1.505.871a1.25 1.25 0 0 1-1.256-.716v-.001a1 1 0 0 1-.078-.21c-.67.038-1.252-.165-1.718-.128-.687.038-1.116.204-1.506.206-.151.331-.445.547-.808.63-.5.114-1.126 0-1.743-.324-.577-.306-1.31-.278-1.85-.39-.27-.057-.51-.157-.626-.384-.116-.226-.095-.538.07-.988.051-.16.012-.398-.026-.648a2.5 2.5 0 0 1-.037-.369c0-.133.022-.265.087-.386v-.002c.14-.266.368-.377.577-.451s.397-.125.53-.258c.143-.15.27-.374.443-.56q.036-.037.073-.07c-.081-.538.007-1.105.192-1.662.393-1.18 1.223-2.314 1.811-3.014.502-.713.65-1.287.701-2.016.042-.997-.705-3.974 2.112-4.2q.168-.015.321-.013"/></svg>',
+        windows: '<svg class="platform-icon" width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6.555 1.375 0 2.237v5.45h6.555zM0 13.795l6.555.933V8.313H0zm7.278-5.4.026 6.378L16 16V8.395zM16 0 7.33 1.244v6.414H16z"/></svg>',
+        macosx: '<svg class="platform-icon" width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/></svg>'
+    };
+
     function platformIcons(platforms) {
         var html = "";
         if (!platforms) return html;
         for (var i = 0; i < platforms.length; i++) {
-            var p = platforms[i];
-            if (p === "linux") html += '<svg class="platform-icon" width="12" height="12" viewBox="0 0 448 512" fill="currentColor"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.6-2.6-3-3.7-1.5-.8-3.1-1.5-4.7-1.5-2.4 0-4.6 1.9-4.6 4.3 0 2 2.4 3.4 4.6 2.7.3-.1 1-.8 1.8-2z"/></svg>';
-            if (p === "windows") html += '<svg class="platform-icon" width="12" height="12" viewBox="0 0 448 512" fill="currentColor"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"/></svg>';
-            if (p === "macosx") html += '<svg class="platform-icon" width="12" height="12" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>';
+            if (iconSvgs[platforms[i]]) html += iconSvgs[platforms[i]];
         }
         return html;
     }
@@ -217,10 +222,10 @@
 
             // Determine base URL for links
             var base = ".";
-            var link = document.querySelector('.nav-logo');
+            var link = document.querySelector(".nav-logo");
             if (link) {
-                var href = link.getAttribute('href') || '.';
-                base = href.replace('/index.html', '');
+                var href = link.getAttribute("href") || ".";
+                base = href.replace("/index.html", "");
             }
 
             var html = "";
@@ -231,7 +236,7 @@
                 html += '<span class="search-result-name">' + escapeHtml(pkg.name) + '</span>';
                 html += '<span class="search-result-icons">' + platformIcons(pkg.platforms) + '</span>';
                 if (pkg.description) {
-                    var shortDesc = pkg.description.length > 60 ? pkg.description.substring(0, 60) + "..." : pkg.description;
+                    var shortDesc = pkg.description.length > 60 ? pkg.description.substring(0, 60) + "\u2026" : pkg.description;
                     html += '<span class="search-result-desc">' + escapeHtml(shortDesc) + '</span>';
                 }
                 html += '</a>';
