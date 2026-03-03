@@ -6,89 +6,79 @@
 <section class="hero">
     <h1 class="hero-title">{{ config.title }}</h1>
     <p class="hero-desc">{{ config.description }}</p>
+
+    {% if config.project_name or config.github or config.license %}
+    <div class="hero-meta">
+        {% if config.project_name %}
+        <a href="{{ config.project_url or '#' }}" class="hero-meta-link" target="_blank" rel="noopener">{{ config.project_name }}</a>
+        {% endif %}
+        {% if config.github %}
+        <a href="{{ config.github }}" class="hero-meta-link" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+        </a>
+        {% endif %}
+        {% if config.docs_url %}
+        <a href="{{ config.docs_url }}" class="hero-meta-link" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg>
+            Docs
+        </a>
+        {% endif %}
+        {% if config.forum %}
+        <a href="{{ config.forum }}" class="hero-meta-link" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+            Forum
+        </a>
+        {% endif %}
+        {% if config.license %}
+        <span class="badge badge-license">{{ config.license }}</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
     <div class="hero-stats">
         <span class="stat"><strong>{{ total_packages }}</strong> packages</span>
         <span class="stat-sep">&middot;</span>
         <span class="stat"><strong>{{ total_categories }}</strong> categories</span>
     </div>
 
-    {% if config.project_name or config.github or config.docs_url or config.license %}
-    <div class="repo-info">
-        {% if config.project_name %}
-        <span class="repo-info-item">
-            {% if config.project_url %}
-            <a href="{{ config.project_url }}" target="_blank" rel="noopener">{{ config.project_name }}</a>
-            {% else %}
-            {{ config.project_name }}
-            {% endif %}
-            {% if config.about_description %}<span class="repo-info-sep">&mdash;</span> {{ config.about_description }}{% endif %}
-        </span>
-        {% endif %}
-        {% if config.github %}
-        <span class="repo-info-sep">&middot;</span>
-        <a href="{{ config.github }}" target="_blank" rel="noopener" class="repo-info-link">GitHub</a>
-        {% endif %}
-        {% if config.docs_url %}
-        <span class="repo-info-sep">&middot;</span>
-        <a href="{{ config.docs_url }}" target="_blank" rel="noopener" class="repo-info-link">Docs</a>
-        {% endif %}
-        {% if config.forum %}
-        <span class="repo-info-sep">&middot;</span>
-        <a href="{{ config.forum }}" target="_blank" rel="noopener" class="repo-info-link">Forum</a>
-        {% endif %}
-        {% if config.license %}
-        <span class="repo-info-sep">&middot;</span>
-        <span class="badge badge-license">{{ config.license }}</span>
-        {% endif %}
+    {% if config.install_commands %}
+    <div class="hero-install" id="hero-install">
+        <span class="hero-install-label">$ </span>
+        <code class="hero-install-cmd" id="install-cmd-unix">{{ config.install_commands.get('unix', '') }}</code>
+        <code class="hero-install-cmd" id="install-cmd-windows" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
+        <button class="hero-install-copy btn-copy" data-target="install-cmd-unix" aria-label="Copy install command" title="Copy">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>
+        </button>
+        <button class="hero-install-toggle" id="install-os-toggle" aria-label="Switch platform">
+            <span id="install-os-label">{{ icon_linux(12) }} {{ icon_macos(12) }}</span>
+        </button>
     </div>
     {% endif %}
 
     <div class="hero-search">
         <input type="text" id="search-input" placeholder="Search packages by name, description, or keyword&hellip;" autocomplete="off" aria-label="Search packages">
+        <div class="search-dropdown search-dropdown-hero" id="search-dropdown"></div>
     </div>
 </section>
 
-{% if config.install_commands %}
-<section class="install-section" aria-label="Install xlings">
-    <h2 class="install-title">Get Started with xlings</h2>
-    <div class="install-tabs" role="tablist">
-        <button class="install-tab active" data-install-tab="unix" role="tab" aria-selected="true" aria-controls="install-cmd-unix">{{ icon_linux(14) }} {{ icon_macos(14) }} Linux / macOS</button>
-        <button class="install-tab" data-install-tab="windows" role="tab" aria-selected="false" aria-controls="install-cmd-windows">{{ icon_windows(14) }} Windows</button>
-    </div>
-    <div class="install-cmd-box">
-        <code class="install-cmd" id="install-cmd-unix" role="tabpanel">{{ config.install_commands.get('unix', '') }}</code>
-        <code class="install-cmd" id="install-cmd-windows" role="tabpanel" style="display:none;">{{ config.install_commands.get('windows', '') }}</code>
-        <button class="btn-copy" data-target="install-cmd-unix" title="Copy to clipboard" aria-label="Copy install command">Copy</button>
-    </div>
+{% set all_categories = [] %}
+{% for pkg in packages %}
+    {% for cat in pkg.categories %}
+        {% if cat not in all_categories %}
+            {% if all_categories.append(cat) %}{% endif %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% if all_categories %}
+<section class="filters" role="toolbar" aria-label="Filter by category">
+    <button class="filter-btn active" data-category="all">All</button>
+    {% for cat in all_categories | sort %}
+    <button class="filter-btn" data-category="{{ cat }}">{{ cat }}</button>
+    {% endfor %}
 </section>
 {% endif %}
-
-<div class="filter-bar">
-    <section class="platform-filters" role="toolbar" aria-label="Filter by platform">
-        <button class="platform-btn active" data-platform="all">All</button>
-        <button class="platform-btn" data-platform="linux">{{ icon_linux(14) }} Linux</button>
-        <button class="platform-btn" data-platform="windows">{{ icon_windows(14) }} Windows</button>
-        <button class="platform-btn" data-platform="macosx">{{ icon_macos(14) }} macOS</button>
-    </section>
-
-    {% set all_categories = [] %}
-    {% for pkg in packages %}
-        {% for cat in pkg.categories %}
-            {% if cat not in all_categories %}
-                {% if all_categories.append(cat) %}{% endif %}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-
-    {% if all_categories %}
-    <section class="filters" role="toolbar" aria-label="Filter by category">
-        <button class="filter-btn active" data-category="all">All</button>
-        {% for cat in all_categories | sort %}
-        <button class="filter-btn" data-category="{{ cat }}">{{ cat }}</button>
-        {% endfor %}
-    </section>
-    {% endif %}
-</div>
 
 <section class="package-grid" id="package-grid">
     {% for pkg in packages %}
@@ -135,25 +125,4 @@
 <div id="no-results" class="no-results" style="display:none;">
     <p>No packages match your search.</p>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-(function() {
-    // Auto-detect OS for install command tabs
-    var tabs = document.querySelectorAll('.install-tab');
-    if (tabs.length > 0) {
-        var ua = navigator.userAgent || navigator.platform || '';
-        var isWindows = /Win/i.test(ua);
-        if (isWindows) {
-            for (var i = 0; i < tabs.length; i++) {
-                if (tabs[i].getAttribute('data-install-tab') === 'windows') {
-                    tabs[i].click();
-                    break;
-                }
-            }
-        }
-    }
-})();
-</script>
 {% endblock %}

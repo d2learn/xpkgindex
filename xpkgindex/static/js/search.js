@@ -6,37 +6,117 @@
     var grid = document.getElementById("package-grid");
     var noResults = document.getElementById("no-results");
     var filterBtns = document.querySelectorAll(".filter-btn");
-    var platformBtns = document.querySelectorAll(".platform-btn");
     var cards = grid ? grid.querySelectorAll(".package-card") : [];
     var activeCategory = "all";
     var activePlatform = "all";
     var debounceTimer = null;
     var isHomePage = !!grid;
 
-    // --- Install tab switching ---
-    var installTabs = document.querySelectorAll(".install-tab");
-    var installCmdUnix = document.getElementById("install-cmd-unix");
-    var installCmdWindows = document.getElementById("install-cmd-windows");
-    var copyBtn = document.querySelector(".install-cmd-box .btn-copy");
+    // --- Platform dropdown (navbar) ---
+    var platformDropdown = document.getElementById("platform-dropdown");
+    var platformDropdownBtn = document.getElementById("platform-dropdown-btn");
+    var platformDropdownMenu = document.getElementById("platform-dropdown-menu");
+    var platformDropdownLabel = document.getElementById("platform-dropdown-label");
+    var platformDropdownIcon = document.getElementById("platform-dropdown-icon");
+    var platformDropdownItems = platformDropdownMenu ? platformDropdownMenu.querySelectorAll(".platform-dropdown-item") : [];
 
-    for (var t = 0; t < installTabs.length; t++) {
-        installTabs[t].addEventListener("click", function () {
-            for (var j = 0; j < installTabs.length; j++) {
-                installTabs[j].classList.remove("active");
-                installTabs[j].setAttribute("aria-selected", "false");
+    // Auto-detect user OS
+    function detectOS() {
+        var ua = navigator.userAgent || "";
+        var platform = navigator.platform || "";
+        if (/Win/i.test(platform)) return "windows";
+        if (/Mac/i.test(platform)) return "macosx";
+        if (/Linux/i.test(platform) || /X11/i.test(ua)) return "linux";
+        return "all";
+    }
+
+    // Set platform dropdown to detected OS on load
+    if (platformDropdown) {
+        var detectedOS = detectOS();
+        for (var d = 0; d < platformDropdownItems.length; d++) {
+            var item = platformDropdownItems[d];
+            var plat = item.getAttribute("data-platform");
+            if (plat === detectedOS) {
+                // Set as active
+                for (var dd = 0; dd < platformDropdownItems.length; dd++) {
+                    platformDropdownItems[dd].classList.remove("active");
+                }
+                item.classList.add("active");
+                activePlatform = detectedOS;
+                if (platformDropdownLabel) {
+                    platformDropdownLabel.textContent = item.textContent.trim();
+                }
+                break;
+            }
+        }
+        filterCards();
+    }
+
+    // Toggle dropdown open/close
+    if (platformDropdownBtn) {
+        platformDropdownBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var isOpen = platformDropdown.classList.toggle("open");
+            platformDropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+    }
+
+    // Handle dropdown item selection
+    for (var pi = 0; pi < platformDropdownItems.length; pi++) {
+        platformDropdownItems[pi].addEventListener("click", function () {
+            for (var j = 0; j < platformDropdownItems.length; j++) {
+                platformDropdownItems[j].classList.remove("active");
             }
             this.classList.add("active");
-            this.setAttribute("aria-selected", "true");
-            var tab = this.getAttribute("data-install-tab");
-            if (installCmdUnix && installCmdWindows && copyBtn) {
-                if (tab === "windows") {
+            activePlatform = this.getAttribute("data-platform");
+            if (platformDropdownLabel) {
+                platformDropdownLabel.textContent = this.textContent.trim();
+            }
+            platformDropdown.classList.remove("open");
+            platformDropdownBtn.setAttribute("aria-expanded", "false");
+            filterCards();
+        });
+    }
+
+    // Close dropdown on click outside
+    document.addEventListener("click", function (e) {
+        if (platformDropdown && !platformDropdown.contains(e.target)) {
+            platformDropdown.classList.remove("open");
+            if (platformDropdownBtn) platformDropdownBtn.setAttribute("aria-expanded", "false");
+        }
+    });
+
+    // --- Install OS toggle ---
+    var installOsToggle = document.getElementById("install-os-toggle");
+    var installCmdUnix = document.getElementById("install-cmd-unix");
+    var installCmdWindows = document.getElementById("install-cmd-windows");
+    var installCopyBtn = document.querySelector(".hero-install-copy");
+    var installOsLabel = document.getElementById("install-os-label");
+    var showingWindows = false;
+
+    // Auto-detect install command OS
+    if (installCmdUnix && installCmdWindows) {
+        var installOS = detectOS();
+        if (installOS === "windows") {
+            installCmdUnix.style.display = "none";
+            installCmdWindows.style.display = "";
+            showingWindows = true;
+            if (installCopyBtn) installCopyBtn.setAttribute("data-target", "install-cmd-windows");
+        }
+    }
+
+    if (installOsToggle) {
+        installOsToggle.addEventListener("click", function () {
+            showingWindows = !showingWindows;
+            if (installCmdUnix && installCmdWindows) {
+                if (showingWindows) {
                     installCmdUnix.style.display = "none";
                     installCmdWindows.style.display = "";
-                    copyBtn.setAttribute("data-target", "install-cmd-windows");
+                    if (installCopyBtn) installCopyBtn.setAttribute("data-target", "install-cmd-windows");
                 } else {
                     installCmdUnix.style.display = "";
                     installCmdWindows.style.display = "none";
-                    copyBtn.setAttribute("data-target", "install-cmd-unix");
+                    if (installCopyBtn) installCopyBtn.setAttribute("data-target", "install-cmd-unix");
                 }
             }
         });
@@ -84,7 +164,7 @@
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(function () {
             filterCards();
-            if (isHomePage) updateDropdown(navSearchInput);
+            if (isHomePage && searchInput) updateDropdown(searchInput);
         }, 200);
     }
 
@@ -122,18 +202,6 @@
         });
     }
 
-    // Platform filter buttons
-    for (var p = 0; p < platformBtns.length; p++) {
-        platformBtns[p].addEventListener("click", function () {
-            for (var j = 0; j < platformBtns.length; j++) {
-                platformBtns[j].classList.remove("active");
-            }
-            this.classList.add("active");
-            activePlatform = this.getAttribute("data-platform");
-            filterCards();
-        });
-    }
-
     // --- Global dropdown search ---
     var dropdown = document.getElementById("search-dropdown");
     var packagesData = null;
@@ -144,7 +212,6 @@
         if (loadingPackages) return;
         loadingPackages = true;
 
-        // Determine base path for packages.json
         var base = ".";
         var scripts = document.getElementsByTagName("script");
         for (var s = 0; s < scripts.length; s++) {
@@ -261,15 +328,19 @@
         });
     }
 
-    // Close dropdown on click outside or Escape
+    // Close search dropdown on click outside or Escape
     document.addEventListener("click", function (e) {
-        if (dropdown && !dropdown.contains(e.target) && e.target !== navSearchInput) {
+        if (dropdown && !dropdown.contains(e.target) && e.target !== navSearchInput && e.target !== searchInput) {
             dropdown.style.display = "none";
         }
     });
     document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && dropdown) {
-            dropdown.style.display = "none";
+        if (e.key === "Escape") {
+            if (dropdown) dropdown.style.display = "none";
+            if (platformDropdown) {
+                platformDropdown.classList.remove("open");
+                if (platformDropdownBtn) platformDropdownBtn.setAttribute("aria-expanded", "false");
+            }
         }
     });
 })();

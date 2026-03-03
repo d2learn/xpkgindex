@@ -27,13 +27,32 @@
     <nav class="navbar">
         <div class="nav-inner">
             <a href="{{ base }}/index.html" class="nav-logo">{{ config.logo }}</a>
-            {% if current_page != 'about' %}
+
+            {% if current_page != 'home' and current_page != 'about' %}
             <div class="nav-search">
-                <input type="text" id="nav-search-input" placeholder="Search packages..." autocomplete="off" aria-label="Search packages">
+                <input type="text" id="nav-search-input" placeholder="Search packages&hellip;" autocomplete="off" aria-label="Search packages">
                 <div class="search-dropdown" id="search-dropdown"></div>
             </div>
             {% endif %}
+
             <div class="nav-actions">
+                {# Platform dropdown selector #}
+                {% if current_page == 'home' %}
+                <div class="platform-dropdown" id="platform-dropdown">
+                    <button class="platform-dropdown-btn" id="platform-dropdown-btn" aria-label="Filter by platform" aria-expanded="false">
+                        <span class="platform-dropdown-icon" id="platform-dropdown-icon">{{ icon_linux(14) }}</span>
+                        <span class="platform-dropdown-label" id="platform-dropdown-label">All</span>
+                        <svg class="chevron-icon" width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+                    </button>
+                    <div class="platform-dropdown-menu" id="platform-dropdown-menu">
+                        <button class="platform-dropdown-item active" data-platform="all">All Platforms</button>
+                        <button class="platform-dropdown-item" data-platform="linux">{{ icon_linux(14) }} Linux</button>
+                        <button class="platform-dropdown-item" data-platform="windows">{{ icon_windows(14) }} Windows</button>
+                        <button class="platform-dropdown-item" data-platform="macosx">{{ icon_macos(14) }} macOS</button>
+                    </div>
+                </div>
+                {% endif %}
+
                 <button id="theme-toggle" class="btn-icon" title="Toggle theme" aria-label="Toggle theme">
                     <span class="icon-sun">&#9728;</span>
                     <span class="icon-moon">&#9790;</span>
