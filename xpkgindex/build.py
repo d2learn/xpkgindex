@@ -389,7 +389,10 @@ def build(root: str, config_path: Optional[str] = None, *,
     _attach_people(packages, hist, site.contributors, upstream_by_owner)
 
     # -- guides -----------------------------------------------------------
-    site.guides, gwarn = guides_mod.load(root, config.guides, config.page_suffix)
+    site.guides, gwarn = guides_mod.load(
+        root, config.guides, config.page_suffix,
+        package_pages={p.source_file: p.url for p in packages},
+        repo_url=config.github)
     site.warnings.extend(gwarn)
 
     site.warnings.extend(host.warnings)

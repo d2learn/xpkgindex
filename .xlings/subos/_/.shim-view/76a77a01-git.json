@@ -1,0 +1,46 @@
+{
+  "fingerprint": {
+    "/home/speak/.xlings/.xlings.json": "3872346:-4646123060595573932",
+    "/home/speak/.xlings/data/versions.json": "3747812:-4646123060544573949",
+    "/home/speak/.xlings/subos/speak-agent-private/.xlings.json": "267902:-4646395691488410080",
+    "/home/speak/workspace/openxlings/xpkgindex/.xlings.json": "83:-4646014801654875656",
+    "/home/speak/workspace/openxlings/xpkgindex/.xlings/.xlings.json": "absent"
+  },
+  "format": 1,
+  "program": "git",
+  "vinfo": {
+    "git": {
+      "filename": "git",
+      "type": "program",
+      "versions": {
+        "2.53.0": {
+          "bindingGroup": {
+            "group": "git",
+            "provider": "xim:git",
+            "rootTarget": "git",
+            "rootVersion": "2.53.0",
+            "version": "2.53.0"
+          },
+          "bindingMembers": {
+            "git": "2.53.0"
+          },
+          "destinationName": "git",
+          "envs": {
+            "GIT_SSL_CAINFO": "/etc/ssl/certs/ca-certificates.crt"
+          },
+          "kind": "program",
+          "path": "/home/speak/.xlings/data/xpkgs/xim-x-git/2.53.0/bin",
+          "sourceName": "git"
+        }
+      }
+    }
+  },
+  "workspace": {
+    "git": {
+      "active": "2.53.0",
+      "installed": [
+        "2.53.0"
+      ]
+    }
+  }
+}
