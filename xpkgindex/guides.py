@@ -207,9 +207,15 @@ def load(root: str, entries: List[Any], suffix: str = "",
                 warnings.append(f"guide translation missing: {rel}")
                 continue
             links.source = rel
+            # depth=2, the same as the default body: a translation is served
+            # at <lang>/docs/<slug>/, and two levels up is <lang>/, whose docs/
+            # and packages/ are this language's pages. depth=3 climbed to the
+            # site root, so every link in a translated guide dropped the reader
+            # into the default language, while an untranslated guide shown in
+            # the same locale kept them in it.
             with open(lpath, "r", encoding="utf-8", errors="replace") as f:
                 langs[lang] = _render(f.read(), os.path.dirname(rel), links,
-                                      depth=3, siblings=siblings)
+                                      depth=2, siblings=siblings)
 
         out.append({
             "slug": entry.slug,

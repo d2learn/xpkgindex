@@ -58,8 +58,10 @@ def repo(tmp_path):
 
 
 def _hrefs(out, page):
+    """The links of the guide body only, not of the site chrome around it."""
     text = open(os.path.join(out, page), encoding="utf-8").read()
-    body = text[text.index('class="doc'):] if 'class="doc' in text else text
+    body = text[text.index('<article class="prose">'):]
+    body = body[:body.index("</article>")]
     return re.findall(r'href="([^"]+)"', body)
 
 
@@ -91,8 +93,10 @@ def test_a_translation_resolves_from_its_own_directory(tmp_path, repo):
     _, out = _site(tmp_path, repo)
     zh = _hrefs(out, os.path.join("zh", "docs", "guide", "index.html"))
     # `../` from docs/zh/ is docs/, whose README is this same guide.
-    assert "../../../docs/guide/" in zh
-    assert any(h.startswith("../../../docs/types/#") for h in zh), zh
+    assert "../../docs/guide/" in zh
+    # Resolved from zh/docs/guide/, so the reader stays in zh/.
+    assert any(h.startswith("../../docs/types/#") for h in zh), zh
+    assert not any(h.startswith("../../../") for h in zh), zh
 
 
 def test_file_style_reaches_the_package_page_itself(tmp_path, repo):
